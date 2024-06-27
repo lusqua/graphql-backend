@@ -6,6 +6,7 @@ import cors from "koa-cors";
 import { graphqlHTTP } from "koa-graphql";
 import { createServer } from "http";
 import { schema } from "./schema/schema";
+import { koaPlayground } from "graphql-playground-middleware";
 
 const app = new Koa();
 const router = new Router();
@@ -17,6 +18,13 @@ router.get("/status", (ctx) => {
   ctx.status = 200;
   ctx.body = "running";
 });
+
+router.all(
+  "/playground",
+  koaPlayground({
+    endpoint: "/graphql",
+  })
+);
 
 const graphApp = convert(
   graphqlHTTP(async (request, response, koaContext) => {
