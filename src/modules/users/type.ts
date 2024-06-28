@@ -5,6 +5,7 @@ import {
   GraphQLObjectType,
   GraphQLString,
   GraphQLSchema,
+  GraphQLInt,
 } from "graphql";
 import { GraphQLContext } from "../../context";
 
@@ -16,5 +17,6 @@ export const userType = new GraphQLObjectType<
   fields: {
     _id: { type: new GraphQLNonNull(GraphQLID) },
     name: { type: new GraphQLNonNull(GraphQLString) },
+    balance: { type: new GraphQLNonNull(GraphQLInt) },
   },
 });

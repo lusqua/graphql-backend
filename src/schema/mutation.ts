@@ -1,13 +1,5 @@
-import {
-  GraphQLInputObjectType,
-  GraphQLObjectType,
-  GraphQLString,
-} from "graphql";
-import {
-  CreateUser,
-  CreateUserInputType,
-  CreateUserPayloadType,
-} from "./user/userMutation";
+import { GraphQLObjectType } from "graphql";
+import { CreateUser } from "./user/userMutation";
 
 export const Mutation = new GraphQLObjectType({
   name: "Mutation",

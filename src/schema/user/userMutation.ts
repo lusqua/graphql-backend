@@ -5,6 +5,7 @@ import {
   GraphQLFieldConfigMap,
   GraphQLNonNull,
   GraphQLFieldConfig,
+  GraphQLInt,
 } from "graphql";
 import { userType } from "../../modules/users/type";
 import { createUser } from "../../modules/users/createUser";
@@ -14,6 +15,9 @@ export const CreateUserInputType = new GraphQLInputObjectType({
   fields: () => ({
     name: {
       type: GraphQLString,
+    },
+    balance: {
+      type: GraphQLInt,
     },
   }),
 });

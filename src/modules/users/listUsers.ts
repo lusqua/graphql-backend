@@ -1,8 +1,7 @@
-import { client } from "../../config/mongo";
+import { db } from "../../config/mongo";
 
 export const listUsers = async () => {
-  const testDb = client.db("test");
-  const users = testDb.collection("users");
+  const users = db.collection("users");
 
   return await users.find().toArray();
 };

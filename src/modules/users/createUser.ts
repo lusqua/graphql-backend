@@ -1,10 +1,9 @@
-import { client } from "../../config/mongo";
+import { db } from "../../config/mongo";
 
-export const createUser = async (name: string) => {
-  const testDb = client.db("test");
-  const users = testDb.collection("users");
+export const createUser = async (name: string, balance: Number) => {
+  const users = db.collection("users");
 
-  const result = await users.insertOne({ name });
+  const result = await users.insertOne({ name, balance });
 
   return await users.findOne({ _id: result.insertedId });
 };
