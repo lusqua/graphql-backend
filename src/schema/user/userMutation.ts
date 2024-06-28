@@ -2,8 +2,6 @@ import {
   GraphQLInputObjectType,
   GraphQLObjectType,
   GraphQLString,
-  GraphQLFieldConfigMap,
-  GraphQLNonNull,
   GraphQLFieldConfig,
   GraphQLInt,
 } from "graphql";
@@ -40,7 +38,7 @@ export const CreateUser: GraphQLFieldConfig<null, null> = {
     },
   },
   resolve: async (_, args) => {
-    const user = await createUser(args.input.name);
+    const user = await createUser(args.input);
 
     return {
       user,

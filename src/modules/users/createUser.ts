@@ -1,6 +1,11 @@
 import { db } from "../../config/mongo";
 
-export const createUser = async (name: string, balance: Number) => {
+type CreateUserArgs = {
+  name: string;
+  balance: Number;
+};
+
+export const createUser = async ({ name, balance }: CreateUserArgs) => {
   const users = db.collection("users");
 
   const result = await users.insertOne({ name, balance });
