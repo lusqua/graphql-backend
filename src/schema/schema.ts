@@ -6,8 +6,9 @@ import {
   GraphQLString,
   GraphQLSchema,
 } from "graphql";
-
-export interface GraphQLContext {}
+import { listUsers } from "../modules/users/listUsers";
+import { GraphQLContext } from "../context";
+import { userType } from "../modules/users/type";
 
 const query = new GraphQLObjectType<Record<string, unknown>, GraphQLContext>({
   name: "Query",
@@ -15,6 +16,10 @@ const query = new GraphQLObjectType<Record<string, unknown>, GraphQLContext>({
     hello: {
       type: GraphQLString,
       resolve: () => "Hello, world!",
+    },
+    users: {
+      type: new GraphQLList(userType),
+      resolve: () => listUsers(),
     },
   },
 });

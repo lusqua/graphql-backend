@@ -7,6 +7,8 @@ import { graphqlHTTP } from "koa-graphql";
 import { createServer } from "http";
 import { schema } from "./schema/schema";
 import { koaPlayground } from "graphql-playground-middleware";
+import { connect } from "./config/mongo";
+import { config } from "./config";
 
 const app = new Koa();
 const router = new Router();
@@ -48,8 +50,10 @@ app.use(router.routes()).use(router.allowedMethods());
 (async () => {
   const server = createServer(app.callback());
 
+  await connect();
+
   // start server
-  server.listen(4000, () => {
-    console.log("Server is running on http://localhost:4000");
+  server.listen(config.port, () => {
+    console.log(`Server is running on http://localhost:${config.port}`);
   });
 })();
