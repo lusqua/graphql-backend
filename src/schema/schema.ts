@@ -9,6 +9,7 @@ import {
 import { listUsers } from "../modules/users/listUsers";
 import { GraphQLContext } from "../context";
 import { userType } from "../modules/users/type";
+import { Mutation } from "./mutation";
 
 const query = new GraphQLObjectType<Record<string, unknown>, GraphQLContext>({
   name: "Query",
@@ -26,4 +27,5 @@ const query = new GraphQLObjectType<Record<string, unknown>, GraphQLContext>({
 
 export const schema = new GraphQLSchema({
   query,
+  mutation: Mutation,
 });
