@@ -1,22 +1,26 @@
 import {
   GraphQLID,
-  GraphQLList,
   GraphQLNonNull,
   GraphQLObjectType,
   GraphQLString,
-  GraphQLSchema,
   GraphQLInt,
 } from "graphql";
 import { GraphQLContext } from "../../context";
 
-export const userType = new GraphQLObjectType<
+export const accountType = new GraphQLObjectType<
   Record<string, unknown>,
   GraphQLContext
 >({
-  name: "User",
+  name: "Account",
   fields: {
     _id: { type: new GraphQLNonNull(GraphQLID) },
     name: { type: new GraphQLNonNull(GraphQLString) },
     balance: { type: GraphQLInt },
   },
 });
+
+export type AccountType = {
+  _id: string;
+  name: string;
+  balance?: number;
+};

@@ -6,11 +6,10 @@ import {
   GraphQLString,
   GraphQLSchema,
 } from "graphql";
-import { listUsers } from "../modules/users/listUsers";
 import { GraphQLContext } from "../context";
-import { userType } from "../modules/users/type";
 import { Mutation } from "./mutation";
-import { users } from "./user/userSchema";
+import { transactions } from "./transactions/transactionSchema";
+import { account, accounts } from "./accounts/accountschema";
 
 const query = new GraphQLObjectType<Record<string, unknown>, GraphQLContext>({
   name: "Query",
@@ -19,7 +18,9 @@ const query = new GraphQLObjectType<Record<string, unknown>, GraphQLContext>({
       type: GraphQLString,
       resolve: () => "Hello, world!",
     },
-    users,
+    accounts,
+    account,
+    transactions,
   },
 });
 

@@ -1,11 +1,11 @@
 import { GraphQLObjectType } from "graphql";
-import { CreateUser } from "./user/userMutation";
+import { CreateAccount } from "./accounts/accountMutation";
 import { CreateTransaction } from "./transactions/transactionMutation";
 
 export const Mutation = new GraphQLObjectType({
   name: "Mutation",
   fields: () => ({
-    CreateUser,
+    CreateAccount,
     CreateTransaction,
   }),
 });

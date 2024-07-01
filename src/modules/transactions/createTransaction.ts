@@ -1,10 +1,12 @@
 import { ObjectId } from "mongodb";
-import { db } from "../../config/mongo";
+import { database } from "../../config/mongo";
 import { createTransactionLock } from "./createTransactionLock";
+import { AccountType } from "../accounts/type";
+import { findAccount } from "../accounts/findAccount";
 
 type CreateTransactionArgs = {
   account: string;
-  toAccount: string;
+  targetAccount: string;
   amount: number;
 };
 
@@ -18,47 +20,18 @@ type CreateTransactionResponse = {
     createdAt: Date;
   } | null;
   error: string | null;
+  account: AccountType | null;
+  targetAccount: AccountType | null;
 };
 
 export const createTransaction = async ({
   account,
-  toAccount,
+  targetAccount,
   amount,
 }: CreateTransactionArgs): Promise<CreateTransactionResponse> => {
-  const transactionLocks = db.collection("transactionsLocks");
-  const transactions = db.collection("transactions");
-  const users = db.collection("users");
-
-  // validate if sender exists
-  const user = await users.findOne({ _id: new ObjectId(account) });
-
-  if (!user) {
-    return {
-      success: false,
-      transaction: null,
-      error: "User not found",
-    };
-  }
-
-  // validated if receiver exists
-  const toUser = await users.findOne({ _id: new ObjectId(toAccount) });
-
-  if (!toUser) {
-    return {
-      success: false,
-      transaction: null,
-      error: "Receiver not found",
-    };
-  }
-
-  // validate user account balance
-  if (user.balance < amount) {
-    return {
-      success: false,
-      transaction: null,
-      error: "Insufficient balance",
-    };
-  }
+  const transactionLocks = database.collection("transactionsLocks");
+  const transactions = database.collection("transactions");
+  const accounts = database.collection("accounts");
 
   // validate transaction ammount
   if (amount < 0) {
@@ -66,17 +39,62 @@ export const createTransaction = async ({
       success: false,
       transaction: null,
       error: "Invalid amount",
+      targetAccount: null,
+      account: null,
+    };
+  }
+
+  // validate if sender exists
+  const fromAccount = await findAccount(account);
+
+  if (!fromAccount._id) {
+    return {
+      success: false,
+      transaction: null,
+      error: "Account not found",
+      targetAccount: null,
+      account: null,
+    };
+  }
+
+  // validated if receiver exists
+  const toAccount = await findAccount(targetAccount);
+
+  if (!toAccount._id) {
+    return {
+      success: false,
+      transaction: null,
+      error: "Receiver not found",
+      targetAccount: null,
+      account: null,
+    };
+  }
+
+  // validate user account balance
+  if (!fromAccount.balance || fromAccount.balance < amount) {
+    return {
+      success: false,
+      transaction: null,
+      error: "Insufficient balance",
+      targetAccount: null,
+      account: null,
     };
   }
 
   // lock user transaction
-  const lockResult = await createTransactionLock(account, amount, toAccount);
+  const lockResult = await createTransactionLock(
+    account,
+    amount,
+    targetAccount
+  );
 
   if (!lockResult.success || !lockResult.insertedId) {
     return {
       success: false,
       transaction: null,
       error: lockResult.error,
+      targetAccount: null,
+      account: null,
     };
   }
 
@@ -90,11 +108,17 @@ export const createTransaction = async ({
 
   // change user account balance
 
-  await users.updateOne({ _id: user._id }, { $inc: { balance: -amount } });
+  await accounts.updateOne(
+    { _id: new ObjectId(account) },
+    { $inc: { balance: -amount } }
+  );
 
   // change toAccount balance
 
-  await users.updateOne({ _id: toUser._id }, { $inc: { balance: amount } });
+  await accounts.updateOne(
+    { _id: new ObjectId(toAccount._id) },
+    { $inc: { balance: amount } }
+  );
 
   // unlock user transaction
 
@@ -110,6 +134,9 @@ export const createTransaction = async ({
     throw new Error("Transaction not found");
   }
 
+  const updatedAccount = await findAccount(account);
+  const updatedToAccount = await findAccount(targetAccount);
+
   return {
     success: true,
     transaction: {
@@ -120,5 +147,7 @@ export const createTransaction = async ({
       createdAt: createdTransaction.createdAt,
     },
     error: null,
+    targetAccount: updatedToAccount,
+    account: updatedAccount,
   };
 };

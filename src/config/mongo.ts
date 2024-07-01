@@ -2,10 +2,10 @@ import { MongoClient } from "mongodb";
 import { config } from "../config";
 
 const uri = config.mongo.uri;
-const database = config.mongo.database;
+const databaseName = config.mongo.database;
 
 export const client = new MongoClient(uri);
-export const db = client.db(database);
+export const database = client.db(databaseName);
 
 export const connect = async () => {
   await client.connect();

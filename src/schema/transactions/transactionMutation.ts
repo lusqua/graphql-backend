@@ -7,10 +7,9 @@ import {
   GraphQLNonNull,
   GraphQLBoolean,
 } from "graphql";
-import { userType } from "../../modules/users/type";
+import { accountType } from "../../modules/accounts/type";
 import { createTransaction } from "../../modules/transactions/createTransaction";
 import { transactionType } from "../../modules/transactions/type";
-import { findUser } from "../../modules/users/findUser";
 
 export const CreateTransactionInputType = new GraphQLInputObjectType({
   name: "CreateTransactionInput",
@@ -21,7 +20,7 @@ export const CreateTransactionInputType = new GraphQLInputObjectType({
     amount: {
       type: new GraphQLNonNull(GraphQLInt),
     },
-    toAccount: {
+    targetAccount: {
       type: new GraphQLNonNull(GraphQLString),
     },
   }),
@@ -34,13 +33,13 @@ export const CreateTransactionPayloadType = new GraphQLObjectType({
       type: GraphQLBoolean,
     },
     account: {
-      type: userType,
+      type: accountType,
     },
     transaction: {
       type: transactionType,
     },
-    toAccount: {
-      type: userType,
+    targetAccount: {
+      type: accountType,
     },
     error: {
       type: GraphQLString,
@@ -58,25 +57,6 @@ export const CreateTransaction: GraphQLFieldConfig<null, null> = {
   },
   resolve: async (_, args) => {
     const transaction = await createTransaction(args.input);
-
-    if (transaction.success) {
-      const account = await findUser(args.input.account);
-      const toAccount = await findUser(args.input.toAccount);
-
-      return {
-        success: true,
-        transaction,
-        account,
-        toAccount,
-      };
-    }
-
-    return {
-      sucess: false,
-      transaction,
-      account: null,
-      toAccount: null,
-      error: transaction.error,
-    };
+    return transaction;
   },
 };
