@@ -8,12 +8,15 @@ import {
   GraphQLBoolean,
 } from "graphql";
 import { accountType } from "../../modules/accounts/type";
-import { createTransaction } from "../../modules/transactions/createTransaction";
+import { makeTransaction } from "../../modules/transactions/resolvers/makeTransaction";
 import { transactionType } from "../../modules/transactions/type";
 
 export const CreateTransactionInputType = new GraphQLInputObjectType({
   name: "CreateTransactionInput",
   fields: () => ({
+    code: {
+      type: GraphQLString,
+    },
     account: {
       type: new GraphQLNonNull(GraphQLString),
     },
@@ -56,7 +59,7 @@ export const CreateTransaction: GraphQLFieldConfig<null, null> = {
     },
   },
   resolve: async (_, args) => {
-    const transaction = await createTransaction(args.input);
+    const transaction = await makeTransaction(args.input);
     return transaction;
   },
 };

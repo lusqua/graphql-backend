@@ -1,4 +1,4 @@
-import { database } from "../../config/mongo";
+import { database } from "../../../config/mongo";
 
 type CreateTransactionResponse = {
   success: boolean;

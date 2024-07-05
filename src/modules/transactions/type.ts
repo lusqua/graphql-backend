@@ -19,3 +19,11 @@ export const transactionType = new GraphQLObjectType<
     amount: { type: new GraphQLNonNull(GraphQLInt) },
   },
 });
+
+export type Transaction = {
+  _id: string;
+  account: string;
+  toAccount: string;
+  amount: number;
+  code: string;
+};

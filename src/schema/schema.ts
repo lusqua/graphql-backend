@@ -20,7 +20,6 @@ const query = new GraphQLObjectType<Record<string, unknown>, GraphQLContext>({
     },
     accounts,
     account,
-    transactions,
   },
 });
 
