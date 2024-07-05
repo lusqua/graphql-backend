@@ -9,7 +9,7 @@ import {
 import { GraphQLContext } from "../context";
 import { Mutation } from "./mutation";
 import { transactions } from "./transactions/transactionSchema";
-import { account, accounts } from "./accounts/accountschema";
+import { account, accounts } from "./accounts/accountSchema";
 
 const query = new GraphQLObjectType<Record<string, unknown>, GraphQLContext>({
   name: "Query",

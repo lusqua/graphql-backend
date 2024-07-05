@@ -1,9 +1,9 @@
 import { database } from "../../config/mongo";
 
-export function listTransactions() {
+export async function listTransactions() {
   const transactions = database.collection("transactions");
 
-  const findedTransactions = transactions.find().toArray();
+  const findedTransactions = await transactions.find().toArray();
 
   return findedTransactions;
 }

@@ -101,7 +101,7 @@ export const createTransaction = async ({
   // create transaction
   const transaction = await transactions.insertOne({
     account,
-    toAccount,
+    targetAccount,
     amount,
     createdAt: new Date(),
   });
