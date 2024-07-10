@@ -11,12 +11,12 @@ export const findTransactionById = async (
 
   if (!transaction) return null;
 
-  const { _id, account, toAccount, amount, code, createdAt } = transaction;
+  const { _id, account, targetAccount, amount, code, createdAt } = transaction;
 
   return {
     _id: _id.toHexString(),
     account,
-    toAccount,
+    targetAccount,
     amount,
     code,
     createdAt,

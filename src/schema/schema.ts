@@ -11,7 +11,7 @@ import { Mutation } from "./mutation";
 import { transactions } from "./transactions/transactionSchema";
 import { account, accounts } from "./accounts/accountSchema";
 
-const query = new GraphQLObjectType<Record<string, unknown>, GraphQLContext>({
+const query = new GraphQLObjectType({
   name: "Query",
   fields: {
     hello: {
@@ -20,6 +20,7 @@ const query = new GraphQLObjectType<Record<string, unknown>, GraphQLContext>({
     },
     accounts,
     account,
+    transactions,
   },
 });
 

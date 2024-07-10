@@ -14,7 +14,7 @@ export const createTransaction = async (
 ): Promise<string> => {
   const { insertedId } = await transactions.insertOne({
     account: new ObjectId(args.from),
-    toAccount: new ObjectId(args.to),
+    targetAccount: new ObjectId(args.to),
     amount: args.amount,
     createdAt: new Date(),
     code: args.code,

@@ -15,7 +15,7 @@ export const transactionType = new GraphQLObjectType<
   fields: {
     _id: { type: new GraphQLNonNull(GraphQLID) },
     account: { type: accountType },
-    toAccount: { type: accountType },
+    targetAccount: { type: accountType },
     amount: { type: new GraphQLNonNull(GraphQLInt) },
   },
 });
@@ -23,7 +23,7 @@ export const transactionType = new GraphQLObjectType<
 export type Transaction = {
   _id: string;
   account: string;
-  toAccount: string;
+  targetAccount: string;
   amount: number;
   code: string;
 };

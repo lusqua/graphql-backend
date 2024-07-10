@@ -4,5 +4,6 @@ import { listTransactions } from "../../modules/transactions/repositories/listTr
 
 export const transactions = {
   type: new GraphQLList(transactionType),
+  description: "List of all transactions",
   resolve: listTransactions,
 };

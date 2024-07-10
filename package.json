@@ -24,6 +24,7 @@
   },
   "dependencies": {
     "@types/graphql": "^14.5.0",
+    "dataloader": "^2.2.2",
     "graphql-playground-middleware": "^1.1.2",
     "koa": "^2.15.3",
     "koa-bodyparser": "^4.4.1",

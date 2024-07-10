@@ -108,7 +108,7 @@ export const makeTransaction = async ({
     transaction: {
       _id: transaction._id,
       account: transaction.account,
-      toAccount: transaction.toAccount,
+      toAccount: transaction.targetAccount,
       amount: transaction.amount,
       createdAt: transaction.createdAt,
     },
