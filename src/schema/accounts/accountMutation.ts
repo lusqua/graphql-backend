@@ -17,6 +17,9 @@ export const CreateAccountInputType = new GraphQLInputObjectType({
     balance: {
       type: GraphQLInt,
     },
+    email: {
+      type: GraphQLString,
+    },
   }),
 });
 

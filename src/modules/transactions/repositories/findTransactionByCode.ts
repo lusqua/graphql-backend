@@ -20,5 +20,6 @@ export const findTransactionByCode = async (
     targetAccount,
     amount,
     code,
+    createdAt,
   };
 };

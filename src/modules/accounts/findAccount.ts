@@ -12,5 +12,6 @@ export const findAccount = async (
     _id: account?._id.toHexString() || "",
     name: account?.name,
     balance: account?.balance,
+    email: account?.email,
   };
 };

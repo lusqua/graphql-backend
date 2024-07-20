@@ -8,7 +8,10 @@ import {
 } from "graphql";
 import { GraphQLContext } from "../context";
 import { Mutation } from "./mutation";
-import { transactions } from "./transactions/transactionSchema";
+import {
+  accountTransactions,
+  transactions,
+} from "./transactions/transactionSchema";
 import { account, accounts } from "./accounts/accountSchema";
 
 const query = new GraphQLObjectType({
@@ -21,6 +24,7 @@ const query = new GraphQLObjectType({
     accounts,
     account,
     transactions,
+    accountTransactions,
   },
 });
 

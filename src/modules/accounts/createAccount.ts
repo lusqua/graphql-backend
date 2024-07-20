@@ -20,5 +20,6 @@ export const createAccount = async ({
     _id: result.insertedId.toHexString(),
     name: createdAccount?.name,
     balance: createdAccount?.balance,
+    email: createdAccount?.email,
   };
 };

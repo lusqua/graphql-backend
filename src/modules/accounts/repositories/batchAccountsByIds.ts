@@ -4,6 +4,7 @@ import { database } from "../../../config/mongo";
 // Função para carregar contas em lote
 export const batchAccountsByIds = async (
   ids: readonly string[],
+  hiddeBalance = true,
   accounts: Collection = database.collection("accounts")
 ) => {
   const objectIds = ids.map((id) => new ObjectId(id));
@@ -22,5 +23,11 @@ export const batchAccountsByIds = async (
 
   const result = ids.map((id) => accountMap.get(id.toString()));
 
-  return result;
+  return result.map((account) => {
+    if (hiddeBalance) {
+      delete account?.balance;
+    }
+
+    return account;
+  });
 };
