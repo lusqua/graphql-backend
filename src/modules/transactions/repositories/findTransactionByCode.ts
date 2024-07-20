@@ -12,7 +12,8 @@ export const findTransactionByCode = async (
 
   if (!findedTransaction) return null;
 
-  const { _id, account, targetAccount, amount, code } = findedTransaction;
+  const { _id, account, targetAccount, amount, code, createdAt } =
+    findedTransaction;
 
   return {
     _id: _id.toHexString(),
