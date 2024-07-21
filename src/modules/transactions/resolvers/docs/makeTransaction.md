@@ -1,5 +1,8 @@
 ## Tradeoffs da Implementação de Transações
 
+![image](https://github.com/user-attachments/assets/48483418-6b3b-45e9-982b-65c9c9b67403)
+
+
 ### Vantagens
 
 1. **Validações Completas**:
