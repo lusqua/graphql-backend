@@ -8,7 +8,7 @@ type CreateTransactionArgs = {
   code: string;
 };
 
-export const createTransaction = async (
+export const createTransactionRepository = async (
   args: CreateTransactionArgs,
   transactions: Collection = database.collection("transactions")
 ): Promise<string> => {

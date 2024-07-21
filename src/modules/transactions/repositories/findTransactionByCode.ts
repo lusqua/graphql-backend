@@ -2,7 +2,7 @@ import { Collection } from "mongodb";
 import { database } from "../../../config/mongo";
 import { Transaction } from "../type";
 
-export const findTransactionByCode = async (
+export const findTransactionByCodeRepository = async (
   transactionCode: string,
   transactions: Collection = database.collection("transactions")
 ): Promise<Transaction | null> => {

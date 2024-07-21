@@ -1,7 +1,7 @@
 import { Collection, ObjectId } from "mongodb";
 import { database } from "../../../config/mongo";
 
-export const findTransactionById = async (
+export const findTransactionByIdRepository = async (
   id: string,
   transactions: Collection = database.collection("transactions")
 ) => {

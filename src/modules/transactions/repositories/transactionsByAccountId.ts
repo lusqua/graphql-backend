@@ -2,7 +2,7 @@ import { Collection, ObjectId } from "mongodb";
 import { database } from "../../../config/mongo";
 import { TransactionType } from "../type";
 
-export const transactionsByAccountId = async (
+export const transactionsByAccountIdRepository = async (
   id: string,
   transactions: Collection = database.collection("transactions")
 ): Promise<TransactionType[]> => {

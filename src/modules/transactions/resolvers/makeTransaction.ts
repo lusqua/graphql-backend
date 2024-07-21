@@ -1,11 +1,21 @@
 import { createTransactionLock } from "../../transaction-lockers/repositories/createTransactionLock";
-import { AccountType } from "../../accounts/type";
+import { accountType, AccountType } from "../../accounts/type";
 import { findAccount } from "../../accounts/resolvers/findAccount";
 import { changeUserAccount } from "../../accounts/repositories/changeUserAccount";
 import { deleteTransactionLocker } from "../../transaction-lockers/repositories/deleteTransactionLocker";
-import { createTransaction } from "../repositories/createTransaction";
-import { findTransactionById } from "../repositories/findTransactionById";
-import { findTransactionByCode } from "../repositories/findTransactionByCode";
+import { createTransactionRepository } from "../repositories/createTransaction";
+import { findTransactionByIdRepository } from "../repositories/findTransactionById";
+import { findTransactionByCodeRepository } from "../repositories/findTransactionByCode";
+import {
+  GraphQLInputObjectType,
+  GraphQLObjectType,
+  GraphQLString,
+  GraphQLFieldConfig,
+  GraphQLInt,
+  GraphQLNonNull,
+  GraphQLBoolean,
+} from "graphql";
+import { transactionType } from "../type";
 
 type CreateTransactionArgs = {
   account: string;
@@ -39,7 +49,7 @@ export const makeTransaction = async ({
     return errorMessage("Invalid amount");
   }
 
-  const findedTransaction = await findTransactionByCode(code);
+  const findedTransaction = await findTransactionByCodeRepository(code);
 
   console.log(findedTransaction);
 
@@ -78,7 +88,7 @@ export const makeTransaction = async ({
   }
 
   // create transaction
-  const transactionId = await createTransaction({
+  const transactionId = await createTransactionRepository({
     from: account,
     to: targetAccount,
     amount,
@@ -94,7 +104,7 @@ export const makeTransaction = async ({
   // unlock user transaction
   await deleteTransactionLocker(lockResult.insertedId);
 
-  const transaction = await findTransactionById(transactionId);
+  const transaction = await findTransactionByIdRepository(transactionId);
 
   if (!transaction) {
     throw new Error("Transaction not found");
@@ -127,3 +137,56 @@ function errorMessage(error: string): CreateTransactionResponse {
     account: null,
   };
 }
+
+export const CreateTransactionInputType = new GraphQLInputObjectType({
+  name: "CreateTransactionInput",
+  fields: () => ({
+    code: {
+      type: GraphQLString,
+    },
+    account: {
+      type: new GraphQLNonNull(GraphQLString),
+    },
+    amount: {
+      type: new GraphQLNonNull(GraphQLInt),
+    },
+    targetAccount: {
+      type: new GraphQLNonNull(GraphQLString),
+    },
+  }),
+});
+
+export const CreateTransactionPayloadType = new GraphQLObjectType({
+  name: "CreateTransactionPayload",
+  fields: () => ({
+    success: {
+      type: GraphQLBoolean,
+    },
+    account: {
+      type: accountType,
+    },
+    transaction: {
+      type: transactionType,
+    },
+    targetAccount: {
+      type: accountType,
+    },
+    error: {
+      type: GraphQLString,
+    },
+  }),
+});
+
+export const CreateTransaction: GraphQLFieldConfig<null, null> = {
+  type: CreateTransactionPayloadType,
+  description: "Create a new transaction",
+  args: {
+    input: {
+      type: CreateTransactionInputType,
+    },
+  },
+  resolve: async (_, args) => {
+    const transaction = await makeTransaction(args.input);
+    return transaction;
+  },
+};
