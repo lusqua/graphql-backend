@@ -1,6 +1,6 @@
 import { createTransactionLock } from "../../transaction-lockers/repositories/createTransactionLock";
 import { AccountType } from "../../accounts/type";
-import { findAccount } from "../../accounts/findAccount";
+import { findAccount } from "../../accounts/resolvers/findAccount";
 import { changeUserAccount } from "../../accounts/repositories/changeUserAccount";
 import { deleteTransactionLocker } from "../../transaction-lockers/repositories/deleteTransactionLocker";
 import { createTransaction } from "../repositories/createTransaction";

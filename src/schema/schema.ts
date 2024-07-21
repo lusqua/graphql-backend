@@ -1,18 +1,11 @@
-import {
-  GraphQLID,
-  GraphQLList,
-  GraphQLNonNull,
-  GraphQLObjectType,
-  GraphQLString,
-  GraphQLSchema,
-} from "graphql";
-import { GraphQLContext } from "../context";
+import { GraphQLObjectType, GraphQLString, GraphQLSchema } from "graphql";
 import { Mutation } from "./mutation";
 import {
   accountTransactions,
   transactions,
 } from "./transactions/transactionSchema";
-import { account, accounts } from "./accounts/accountSchema";
+import { accounts } from "../modules/accounts/resolvers/listAccounts";
+import { account } from "../modules/accounts/resolvers/findAccount";
 
 const query = new GraphQLObjectType({
   name: "Query",

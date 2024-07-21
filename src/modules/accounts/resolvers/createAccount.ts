@@ -1,3 +1,7 @@
+import { createAccountRepository } from "../repositories/createAccount";
+import { findOneAccountRepository } from "../repositories/findOneAccount";
+import { accountType, AccountType } from "../type";
+
 import {
   GraphQLInputObjectType,
   GraphQLObjectType,
@@ -5,8 +9,27 @@ import {
   GraphQLFieldConfig,
   GraphQLInt,
 } from "graphql";
-import { accountType } from "../../modules/accounts/type";
-import { createAccount } from "../../modules/accounts/resolvers/createAccount";
+
+type CreateAccountArgs = {
+  name: string;
+  balance: number;
+  email: string;
+};
+
+export const createAccount = async (
+  account: CreateAccountArgs
+): Promise<AccountType> => {
+  const insertedId = await createAccountRepository(account);
+
+  const createdAccount = await findOneAccountRepository(insertedId);
+
+  return {
+    _id: insertedId,
+    name: createdAccount?.name,
+    balance: createdAccount?.balance,
+    email: createdAccount?.email,
+  };
+};
 
 export const CreateAccountInputType = new GraphQLInputObjectType({
   name: "CreateAccountInput",
