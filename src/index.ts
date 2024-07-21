@@ -9,6 +9,7 @@ import { schema } from "./schema/schema";
 import { koaPlayground } from "graphql-playground-middleware";
 import { connect } from "./config/mongo";
 import { config } from "./config";
+import "dotenv/config";
 
 const app = new Koa();
 const router = new Router();
