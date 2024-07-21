@@ -1,5 +1,8 @@
 ## Trade-offs of the Transaction Implementation
 
+![image](https://github.com/user-attachments/assets/17412e48-e026-4920-8de9-1a86c1876fdd)
+
+
 ### Advantages
 
 1. **Complete Validations**:
