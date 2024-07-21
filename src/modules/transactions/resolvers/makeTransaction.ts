@@ -44,6 +44,13 @@ export const makeTransaction = async ({
   amount,
   code,
 }: CreateTransactionArgs): Promise<CreateTransactionResponse> => {
+  // validate if sender exists
+  const fromAccount = await findAccount(account);
+
+  if (!fromAccount._id) {
+    return errorMessage("Account not found");
+  }
+
   // validate transaction ammount
   if (amount < 0) {
     return errorMessage("Invalid amount");
@@ -51,17 +58,8 @@ export const makeTransaction = async ({
 
   const findedTransaction = await findTransactionByCodeRepository(code);
 
-  console.log(findedTransaction);
-
   if (findedTransaction) {
     return errorMessage("Transaction already exists");
-  }
-
-  // validate if sender exists
-  const fromAccount = await findAccount(account);
-
-  if (!fromAccount._id) {
-    return errorMessage("Account not found");
   }
 
   // validated if receiver exists
