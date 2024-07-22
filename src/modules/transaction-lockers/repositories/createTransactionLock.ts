@@ -9,7 +9,7 @@ type CreateTransactionResponse = {
 
 export const createTransactionLock = async (
   user: string,
-  ammount: number,
+  amount: number,
   toAccount: string,
   collection = database.collection(config.collections.transactionsLocks)
 ): Promise<CreateTransactionResponse> => {
@@ -18,11 +18,9 @@ export const createTransactionLock = async (
   try {
     const result = await collection.insertOne({
       user,
-      ammount,
+      amount,
       toAccount,
     });
-
-    console.log(result);
 
     return {
       success: true,
