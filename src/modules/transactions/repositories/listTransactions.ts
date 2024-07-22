@@ -9,8 +9,10 @@ export const listTransactionsRepository = async (
 
   return transactionsList.map((transaction) => ({
     _id: transaction._id.toHexString(),
-    account: transaction.account,
-    targetAccount: transaction.targetAccount,
+    sender: transaction.sender,
+    senderBalanceAfter: transaction.senderBalanceAfter,
+    receiver: transaction.receiver,
+    receiverBalanceAfter: transaction.receiverBalanceAfter,
     amount: transaction.amount,
     code: transaction.code,
     createdAt: transaction.createdAt,

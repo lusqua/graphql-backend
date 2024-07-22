@@ -16,13 +16,13 @@ export const transactionsByAccount = async (
   return transactions.map((transaction: TransactionType) => {
     return {
       _id: transaction._id,
-      account: () => {
-        const accountId = transaction.account;
-        return accountLoader.load(accountId);
+      sender: () => {
+        const senderId = transaction.sender;
+        return accountLoader.load(senderId);
       },
-      targetAccount: () => {
-        const accountId = transaction.targetAccount;
-        return accountLoader.load(accountId);
+      receiver: () => {
+        const receiverId = transaction.receiver;
+        return accountLoader.load(receiverId);
       },
       amount: transaction.amount,
       code: transaction.code,

@@ -18,16 +18,15 @@ export const transactionsByAccountIdRepository = async (
     .toArray();
 
   return findedTransactions.map((transaction) => {
-    const { _id, account, targetAccount, amount, code, createdAt } =
-      transaction;
-
     return {
-      _id: _id.toHexString(),
-      account: account.toHexString(),
-      targetAccount: targetAccount.toHexString(),
-      amount,
-      code,
-      createdAt,
+      _id: transaction._id.toHexString(),
+      sender: transaction.sender.toHexString(),
+      senderBalanceAfter: transaction.senderBalanceAfter,
+      receiver: transaction.receiver.toHexString(),
+      receiverBalanceAfter: transaction.receiverBalanceAfter,
+      amount: transaction.amount,
+      code: transaction.code,
+      createdAt: transaction.createdAt,
     };
   });
 };

@@ -47,7 +47,7 @@ export const makeTransaction = async ({
   // validate if sender exists
   const sender = await findAccount(account);
 
-  if (!sender._id) {
+  if (!sender?._id) {
     return errorMessage("Account not found");
   }
 
@@ -65,7 +65,7 @@ export const makeTransaction = async ({
   // validated if receiver exists
   const receiver = await findAccount(targetAccount);
 
-  if (!receiver._id) {
+  if (!receiver?._id) {
     return errorMessage("Receiver not found");
   }
 
@@ -102,7 +102,7 @@ export const makeTransaction = async ({
   });
 
   // unlock user transaction
-  console.log(await deleteTransactionLock(lockResult.insertedId));
+  await deleteTransactionLock(lockResult.insertedId);
 
   const transaction = await findTransactionByIdRepository(transactionId);
 

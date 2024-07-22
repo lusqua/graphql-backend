@@ -15,8 +15,10 @@ export const transactionType = new GraphQLObjectType<
   name: "Transactions",
   fields: {
     _id: { type: new GraphQLNonNull(GraphQLID) },
-    account: { type: accountType },
-    targetAccount: { type: accountType },
+    sender: { type: accountType },
+    senderBalanceAfter: { type: new GraphQLNonNull(GraphQLInt) },
+    receiver: { type: accountType },
+    receiverBalanceAfter: { type: new GraphQLNonNull(GraphQLInt) },
     amount: { type: new GraphQLNonNull(GraphQLInt) },
     createdAt: { type: new GraphQLNonNull(GraphQLString) },
   },
@@ -24,8 +26,10 @@ export const transactionType = new GraphQLObjectType<
 
 export type Transaction = {
   _id: string;
-  account: () => Promise<AccountType>;
-  targetAccount: () => Promise<AccountType>;
+  sender: () => Promise<AccountType>;
+  senderBalanceAfter?: number;
+  receiver: () => Promise<AccountType>;
+  receiverBalanceAfter?: number;
   amount: number;
   code: string;
   createdAt: string;
@@ -33,8 +37,10 @@ export type Transaction = {
 
 export type TransactionType = {
   _id: string;
-  account: string;
-  targetAccount: string;
+  sender: string;
+  senderBalanceAfter: number;
+  receiver: string;
+  receiverBalanceAfter: number;
   amount: number;
   code: string;
   createdAt: string;

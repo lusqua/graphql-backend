@@ -15,13 +15,23 @@ export const findTransactionByCodeRepository = async (
 
   if (!findedTransaction) return null;
 
-  const { _id, account, targetAccount, amount, code, createdAt } =
-    findedTransaction;
+  const {
+    _id,
+    sender,
+    senderBalanceAfter,
+    receiver,
+    receiverBalanceAfter,
+    amount,
+    code,
+    createdAt,
+  } = findedTransaction;
 
   return {
     _id: _id.toHexString(),
-    account,
-    targetAccount,
+    sender,
+    senderBalanceAfter,
+    receiver,
+    receiverBalanceAfter,
     amount,
     code,
     createdAt,

@@ -4,7 +4,7 @@ import { listTransactionsRepository } from "../repositories/listTransactions";
 import DataLoader from "dataloader";
 import { batchAccountsByIds } from "../../accounts/repositories/batchAccountsByIds";
 
-const listTransactions = async () => {
+export const listTransactions = async () => {
   const accountLoader = new DataLoader<string, any>((ids) =>
     batchAccountsByIds(ids)
   );
@@ -14,14 +14,16 @@ const listTransactions = async () => {
   return transactions.map((transaction) => {
     return {
       _id: transaction._id,
-      account: () => {
-        const accountId = transaction.account;
-        return accountLoader.load(accountId);
+      sender: () => {
+        const senderId = transaction.sender;
+        return accountLoader.load(senderId);
       },
-      targetAccount: () => {
-        const accountId = transaction.targetAccount;
-        return accountLoader.load(accountId);
+      senderBalanceAfter: transaction.senderBalanceAfter,
+      receiver: () => {
+        const receiverId = transaction.receiver;
+        return accountLoader.load(receiverId);
       },
+      receiverBalanceAfter: transaction.receiverBalanceAfter,
       amount: transaction.amount,
       code: transaction.code,
       createdAt: transaction.createdAt,
