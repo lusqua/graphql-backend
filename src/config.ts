@@ -4,4 +4,9 @@ export const config = {
     database: process.env.MONGO_DB || "test",
   },
   port: process.env.PORT || 4000,
+  collections: {
+    accounts: "accounts",
+    transactions: "transactions",
+    transactionsLocks: "transactionsLocks",
+  },
 };

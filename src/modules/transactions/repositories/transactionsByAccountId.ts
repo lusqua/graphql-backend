@@ -1,10 +1,13 @@
 import { Collection, ObjectId } from "mongodb";
 import { database } from "../../../config/mongo";
 import { TransactionType } from "../type";
+import { config } from "../../../config";
 
 export const transactionsByAccountIdRepository = async (
   id: string,
-  transactions: Collection = database.collection("transactions")
+  transactions: Collection = database.collection(
+    config.collections.transactions
+  )
 ): Promise<TransactionType[]> => {
   const parsedId = new ObjectId(id);
 

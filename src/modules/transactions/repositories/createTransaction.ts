@@ -1,20 +1,27 @@
 import { Collection, ObjectId } from "mongodb";
 import { database } from "../../../config/mongo";
+import { config } from "../../../config";
 
 type CreateTransactionArgs = {
   amount: number;
-  from: string;
-  to: string;
+  sender: string;
+  senderBalanceAfter: number;
+  receiver: string;
+  receiverBalanceAfter: number;
   code: string;
 };
 
 export const createTransactionRepository = async (
   args: CreateTransactionArgs,
-  transactions: Collection = database.collection("transactions")
+  transactions: Collection = database.collection(
+    config.collections.transactions
+  )
 ): Promise<string> => {
   const { insertedId } = await transactions.insertOne({
-    account: new ObjectId(args.from),
-    targetAccount: new ObjectId(args.to),
+    sender: new ObjectId(args.sender),
+    senderBalanceAfter: args.senderBalanceAfter,
+    receiver: new ObjectId(args.receiver),
+    receiverBalanceAfter: args.receiverBalanceAfter,
     amount: args.amount,
     createdAt: new Date(),
     code: args.code,

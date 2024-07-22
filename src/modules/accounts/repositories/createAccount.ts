@@ -1,3 +1,4 @@
+import { config } from "../../../config";
 import { database } from "../../../config/mongo";
 
 type CreateAccount = {
@@ -8,7 +9,7 @@ type CreateAccount = {
 
 export const createAccountRepository = async (
   account: CreateAccount,
-  collection = database.collection("accounts")
+  collection = database.collection(config.collections.accounts)
 ) => {
   const result = await collection.insertOne(account);
 

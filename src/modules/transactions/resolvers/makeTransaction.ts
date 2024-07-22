@@ -2,7 +2,7 @@ import { createTransactionLock } from "../../transaction-lockers/repositories/cr
 import { accountType, AccountType } from "../../accounts/type";
 import { findAccount } from "../../accounts/resolvers/findAccount";
 import { changeUserAccount } from "../../accounts/repositories/changeUserAccount";
-import { deleteTransactionLocker } from "../../transaction-lockers/repositories/deleteTransactionLocker";
+import { deleteTransactionLock } from "../../transaction-lockers/repositories/deleteTransactionLock";
 import { createTransactionRepository } from "../repositories/createTransaction";
 import { findTransactionByIdRepository } from "../repositories/findTransactionById";
 import { findTransactionByCodeRepository } from "../repositories/findTransactionByCode";
@@ -45,9 +45,9 @@ export const makeTransaction = async ({
   code,
 }: CreateTransactionArgs): Promise<CreateTransactionResponse> => {
   // validate if sender exists
-  const fromAccount = await findAccount(account);
+  const sender = await findAccount(account);
 
-  if (!fromAccount._id) {
+  if (!sender._id) {
     return errorMessage("Account not found");
   }
 
@@ -63,14 +63,14 @@ export const makeTransaction = async ({
   }
 
   // validated if receiver exists
-  const toAccount = await findAccount(targetAccount);
+  const receiver = await findAccount(targetAccount);
 
-  if (!toAccount._id) {
+  if (!receiver._id) {
     return errorMessage("Receiver not found");
   }
 
   // validate user account balance
-  if (!fromAccount.balance || fromAccount.balance < amount) {
+  if (!sender.balance || sender.balance < amount) {
     return errorMessage("Insufficient balance");
   }
 
@@ -85,22 +85,24 @@ export const makeTransaction = async ({
     return errorMessage(lockResult.error || "Transaction already in progress");
   }
 
+  // change user account balance
+  const senderBalance = await changeUserAccount(account, -amount);
+
+  // change toAccount balance
+  const receiverBalance = await changeUserAccount(targetAccount, amount);
+
   // create transaction
   const transactionId = await createTransactionRepository({
-    from: account,
-    to: targetAccount,
+    sender: account,
+    senderBalanceAfter: senderBalance,
+    receiver: targetAccount,
+    receiverBalanceAfter: receiverBalance,
     amount,
     code,
   });
 
-  // change user account balance
-  changeUserAccount(account, -amount);
-
-  // change toAccount balance
-  changeUserAccount(targetAccount, amount);
-
   // unlock user transaction
-  await deleteTransactionLocker(lockResult.insertedId);
+  console.log(await deleteTransactionLock(lockResult.insertedId));
 
   const transaction = await findTransactionByIdRepository(transactionId);
 

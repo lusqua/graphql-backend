@@ -1,3 +1,4 @@
+import { config } from "../../../config";
 import { database } from "../../../config/mongo";
 
 type CreateTransactionResponse = {
@@ -9,18 +10,19 @@ type CreateTransactionResponse = {
 export const createTransactionLock = async (
   user: string,
   ammount: number,
-  toAccount: string
+  toAccount: string,
+  collection = database.collection(config.collections.transactionsLocks)
 ): Promise<CreateTransactionResponse> => {
-  const transactions = database.collection("transactionsLocks");
-
-  await transactions.createIndex({ user: 1 }, { unique: true });
+  await collection.createIndex({ user: 1 }, { unique: true });
 
   try {
-    const result = await transactions.insertOne({
+    const result = await collection.insertOne({
       user,
       ammount,
       toAccount,
     });
+
+    console.log(result);
 
     return {
       success: true,

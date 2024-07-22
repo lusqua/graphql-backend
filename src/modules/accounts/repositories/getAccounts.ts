@@ -1,8 +1,9 @@
+import { config } from "../../../config";
 import { database } from "../../../config/mongo";
 
 export const getAccounts = async (
   filter = {},
-  collection = database.collection("accounts")
+  collection = database.collection(config.collections.accounts)
 ) => {
   const findedAccount = await collection.find(filter).toArray();
 

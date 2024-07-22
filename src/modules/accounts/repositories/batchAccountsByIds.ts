@@ -1,11 +1,12 @@
 import { Collection, ObjectId } from "mongodb";
 import { database } from "../../../config/mongo";
+import { config } from "../../../config";
 
 // Função para carregar contas em lote
 export const batchAccountsByIds = async (
   ids: readonly string[],
   hiddeBalance = true,
-  accounts: Collection = database.collection("accounts")
+  accounts: Collection = database.collection(config.collections.accounts)
 ) => {
   const objectIds = ids.map((id) => new ObjectId(id));
 

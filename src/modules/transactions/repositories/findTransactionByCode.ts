@@ -1,10 +1,13 @@
 import { Collection } from "mongodb";
 import { database } from "../../../config/mongo";
 import { Transaction } from "../type";
+import { config } from "../../../config";
 
 export const findTransactionByCodeRepository = async (
   transactionCode: string,
-  transactions: Collection = database.collection("transactions")
+  transactions: Collection = database.collection(
+    config.collections.transactions
+  )
 ): Promise<Transaction | null> => {
   const findedTransaction = await transactions.findOne({
     code: transactionCode,
