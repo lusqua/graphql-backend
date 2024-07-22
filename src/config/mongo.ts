@@ -5,6 +5,7 @@ const uri = config.mongo.uri;
 const databaseName = config.mongo.database;
 
 export const client = new MongoClient(uri);
+
 export const database = client.db(databaseName);
 
 export const connect = async () => {

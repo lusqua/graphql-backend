@@ -21,5 +21,7 @@ export const changeUserAccount = async (
     }
   );
 
+  if (!acc) throw new Error("Account not found");
+
   return acc!.balance;
 };
