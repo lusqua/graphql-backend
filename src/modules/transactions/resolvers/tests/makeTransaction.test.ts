@@ -37,8 +37,8 @@ describe("makeTransaction", () => {
     findAccountMock.mockResolvedValueOnce(null);
 
     const result = await makeTransaction({
-      account: "nonexistentAccount",
-      targetAccount: "targetAccountId",
+      sender: "nonexistentAccount",
+      receiver: "targetAccountId",
       amount: 100,
       code: "transactionCode",
     });
@@ -56,8 +56,8 @@ describe("makeTransaction", () => {
     findAccountMock.mockResolvedValueOnce({ _id: "accountId", balance: 1000 });
 
     const result = await makeTransaction({
-      account: "accountId",
-      targetAccount: "targetAccountId",
+      sender: "accountId",
+      receiver: "targetAccountId",
       amount: -100,
       code: "transactionCode",
     });
@@ -76,8 +76,8 @@ describe("makeTransaction", () => {
     findTransactionByCodeRepositoryMock.mockResolvedValueOnce({});
 
     const result = await makeTransaction({
-      account: "accountId",
-      targetAccount: "targetAccountId",
+      sender: "accountId",
+      receiver: "targetAccountId",
       amount: 100,
       code: "transactionCode",
     });
@@ -97,8 +97,8 @@ describe("makeTransaction", () => {
     findAccountMock.mockResolvedValueOnce(null);
 
     const result = await makeTransaction({
-      account: "accountId",
-      targetAccount: "nonexistentTargetAccount",
+      sender: "accountId",
+      receiver: "nonexistentTargetAccount",
       amount: 100,
       code: "transactionCode",
     });
@@ -118,8 +118,8 @@ describe("makeTransaction", () => {
     findAccountMock.mockResolvedValueOnce({ _id: "targetAccountId" });
 
     const result = await makeTransaction({
-      account: "accountId",
-      targetAccount: "targetAccountId",
+      sender: "accountId",
+      receiver: "targetAccountId",
       amount: 100,
       code: "transactionCode",
     });
@@ -160,8 +160,8 @@ describe("makeTransaction", () => {
     });
 
     const result = await makeTransaction({
-      account: "accountId",
-      targetAccount: "targetAccountId",
+      sender: "accountId",
+      receiver: "targetAccountId",
       amount: 100,
       code: "transactionCode",
     });

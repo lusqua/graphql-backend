@@ -49,7 +49,7 @@ describe("transactionsByAccountIdRepository", () => {
     );
 
     expect(mockCollection.find).toHaveBeenCalledWith({
-      $or: [{ account: accountId }, { targetAccount: accountId }],
+      $or: [{ sender: accountId }, { receiver: accountId }],
     });
     expect(result).toEqual(
       transactionsData.map((transaction) => ({
@@ -73,7 +73,7 @@ describe("transactionsByAccountIdRepository", () => {
     );
 
     expect(mockCollection.find).toHaveBeenCalledWith({
-      $or: [{ account: accountId }, { targetAccount: accountId }],
+      $or: [{ sender: accountId }, { receiver: accountId }],
     });
     expect(result).toEqual([]);
   });

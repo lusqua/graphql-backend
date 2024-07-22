@@ -18,8 +18,8 @@ import {
 import { transactionType } from "../type";
 
 type CreateTransactionArgs = {
-  account: string;
-  targetAccount: string;
+  sender: string;
+  receiver: string;
   amount: number;
   code: string;
 };
@@ -39,15 +39,15 @@ type CreateTransactionResponse = {
 };
 
 export const makeTransaction = async ({
-  account,
-  targetAccount,
+  sender,
+  receiver,
   amount,
   code,
 }: CreateTransactionArgs): Promise<CreateTransactionResponse> => {
   // validate if sender exists
-  const sender = await findAccount(account);
+  const findedSender = await findAccount(sender);
 
-  if (!sender?._id) {
+  if (!findedSender?._id) {
     return errorMessage("Account not found");
   }
 
@@ -63,39 +63,35 @@ export const makeTransaction = async ({
   }
 
   // validated if receiver exists
-  const receiver = await findAccount(targetAccount);
+  const findedReceiver = await findAccount(receiver);
 
-  if (!receiver?._id) {
+  if (!findedReceiver?._id) {
     return errorMessage("Receiver not found");
   }
 
   // validate user account balance
-  if (!sender.balance || sender.balance < amount) {
+  if (!findedSender.balance || findedSender.balance < amount) {
     return errorMessage("Insufficient balance");
   }
 
   // lock user transaction
-  const lockResult = await createTransactionLock(
-    account,
-    amount,
-    targetAccount
-  );
+  const lockResult = await createTransactionLock(sender, amount, receiver);
 
   if (!lockResult.success || !lockResult.insertedId) {
     return errorMessage(lockResult.error || "Transaction already in progress");
   }
 
   // change user account balance
-  const senderBalance = await changeUserAccount(account, -amount);
+  const senderBalance = await changeUserAccount(sender, -amount);
 
   // change toAccount balance
-  const receiverBalance = await changeUserAccount(targetAccount, amount);
+  const receiverBalance = await changeUserAccount(receiver, amount);
 
   // create transaction
   const transactionId = await createTransactionRepository({
-    sender: account,
+    sender,
     senderBalanceAfter: senderBalance,
-    receiver: targetAccount,
+    receiver,
     receiverBalanceAfter: receiverBalance,
     amount,
     code,
@@ -110,8 +106,8 @@ export const makeTransaction = async ({
     throw new Error("Transaction not found");
   }
 
-  const updatedAccount = await findAccount(account);
-  const updatedToAccount = await findAccount(targetAccount);
+  const updatedAccount = await findAccount(sender);
+  const updatedToAccount = await findAccount(receiver);
 
   return {
     success: true,
@@ -144,13 +140,13 @@ export const CreateTransactionInputType = new GraphQLInputObjectType({
     code: {
       type: GraphQLString,
     },
-    account: {
+    sender: {
       type: new GraphQLNonNull(GraphQLString),
     },
     amount: {
       type: new GraphQLNonNull(GraphQLInt),
     },
-    targetAccount: {
+    receiver: {
       type: new GraphQLNonNull(GraphQLString),
     },
   }),
@@ -162,13 +158,13 @@ export const CreateTransactionPayloadType = new GraphQLObjectType({
     success: {
       type: GraphQLBoolean,
     },
-    account: {
+    sender: {
       type: accountType,
     },
     transaction: {
       type: transactionType,
     },
-    targetAccount: {
+    receiver: {
       type: accountType,
     },
     error: {

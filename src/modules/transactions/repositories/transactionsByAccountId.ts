@@ -13,7 +13,7 @@ export const transactionsByAccountIdRepository = async (
 
   const findedTransactions = await transactions
     .find({
-      $or: [{ account: parsedId }, { targetAccount: parsedId }],
+      $or: [{ sender: parsedId }, { receiver: parsedId }],
     })
     .toArray();
 
